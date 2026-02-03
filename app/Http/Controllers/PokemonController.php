@@ -45,9 +45,15 @@ class PokemonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pokemon $pokemon)
+    public function show($id)
     {
-        //
+        $pokemon = \App\Models\Pokemon::find($id);
+
+        if (!$pokemon) {
+            return response()->json(['mensaje' => 'Pokemon no encontrado'], 404);
+        }
+
+        return $pokemon;
     }
 
     /**
@@ -61,16 +67,36 @@ class PokemonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pokemon $pokemon)
+    public function update(\Illuminate\Http\Request $request, $id)
     {
-        //
+       
+        $pokemon = \App\Models\Pokemon::find($id);
+
+       
+        if (!$pokemon) {
+            return response()->json(['mensaje' => 'Pokemon no encontrado'], 404);
+        }
+
+        
+        $pokemon->update($request->all());
+
+        
+        return response()->json($pokemon, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Pokemon $pokemon)
+    public function destroy($id)
     {
-        //
+
+        $pokemon = \App\Models\Pokemon::find($id);
+
+        
+        if (!$pokemon) {
+            return response()->json(['mensaje' => 'Pokemon no encontrado'], 404);
+        }
+
+        $pokemon->delete();
+
+        
+        return response()->json(['mensaje' => 'Pokemon eliminado correctamente'], 200);
     }
 }
